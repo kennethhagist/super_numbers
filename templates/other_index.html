@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="{{url_for("static", filename = "index.css")}}">
+        <title>Great Numbers Game</title>
+    </head>
+    <body>
+        <h1>The Great Numbers Game!!!</h1>
+        <p>I am thinking of a number between 1 and 100</p>
+        <p>Take a guess</p>
+
+        <form action="/guess" method="POST">
+            <input type="number" name="num_value">
+            <input type="submit" value="Submit">
+
+                {% if "too low" == session["randRange"] %}
+                    <div class="too_low">
+                        <p>Too Low!!</p>
+                    </div>
+
+                {% elif "too high" == session["randRange"] %}
+                    <div class="too_high">
+                        <p>Too High!!</p>
+                    </div>
+
+                {% elif "you won" == session["randRange"] %}
+                    <div class="you_won">
+                        <p>You Won!!</p>
+                    </div>
+
+                {% endif %}
+        </form>
+        <p>Play Again</p>
+        <a href="/refresh">/Restart</a>
+    </body>
+</html>

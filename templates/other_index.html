@@ -7,31 +7,22 @@
     </head>
     <body>
         <h1>The Great Numbers Game!!!</h1>
-        <p>I am thinking of a number between 1 and 100</p>
-        <p>Take a guess</p>
-
-        <form action="/guess" method="POST">
-            <input type="number" name="num_value">
-            <input type="submit" value="Submit">
-
-                {% if "too low" == session["randRange"] %}
-                    <div class="too_low">
-                        <p>Too Low!!</p>
-                    </div>
-
-                {% elif "too high" == session["randRange"] %}
-                    <div class="too_high">
-                        <p>Too High!!</p>
-                    </div>
-
-                {% elif "you won" == session["randRange"] %}
-                    <div class="you_won">
-                        <p>You Won!!</p>
-                    </div>
-
-                {% endif %}
+        <p>I am thinking of a number between 1 and 100 ({{ session ['target'] }})</p>
+        <p>Take 5 guess only</p>
+        <form action="/guess" method="post">
+            <input type="number" name="guess">
+            <input type="submit" value="guess">
         </form>
-        <p>Play Again</p>
-        <a href="/refresh">/Restart</a>
+        {{ session['result'] }}
+            {% if session['result'] == 'correct' %}
+            <h2>Correct! {{session['target'] }} was the number!</h2>
+            <form action='/reset'>
+                <input type="submit" value="Play Again">
+            </form>
+            {% elif session['result'] == "low" %}
+            <h3>Too small!</h3>
+            {% elif session['result'] == 'high'%}
+            <h3>Too high</h3>
+            {% endif %}
     </body>
 </html>

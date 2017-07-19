@@ -1,44 +1,33 @@
-from flask import Flask, render_template, session, redirect, request
+from flask import Flask, render_template, request, redirect, session
 import random
-
 app = Flask(__name__)
-app.secret_key = 'SuperSecret'
-
-#def sessRange():
-    #session['range'] = random.randrange(0,101)
+app.secret_key = 'Secretlair'
 
 @app.route('/')
-def great_numbers():
-    session['number'] = random.randrange(0,101)
+def index():
+    print "so many numbers to chose from"
+    if 'target' not in session:
+        session['target'] = random.randint(1, 100)
     return render_template('other_index.html')
 
-@app.route('/guess', methods=['POST'])
-def you_lost():
 
+@app.route('/guess', methods=['post'])
+def guess():
+    if session['target'] == int(request.form['guess']):
+        session['result'] = 'correct'
 
-    print session
-
-    randRange = int(request.form['num_value'])
-    print randRange
-
-    if session['guess'] > randRange:
-        session['randRange'] = 'too low'
-        print 'too low'
-
-    elif session['guess'] < randRange:
-        session['randRange'] = 'too high'
-        print 'too high'
+    elif session['target'] < int(request.form['guess']):
+        session['result'] = 'high'
 
     else:
-        session['randRange'] = 'you won'
-        print 'you won'
+        session['result'] = 'low'
 
     return redirect('/')
 
-@app.route('/refresh')
-def you_won():
-    session.clear()
+@app.route('/reset')
+def reset():
+    session.pop('target')
+    session.pop('result')
     return redirect('/')
-
 
 app.run(debug=True)
